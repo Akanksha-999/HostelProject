@@ -2,10 +2,19 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
+const app = express();
 const authRoutes = require("./routes/authRoutes");
 
-const app = express();
+const hostelRouter = require("./routes/hostelApis");
+const roomRouter = require("./routes/roomApis");
+app.use(express.json());
+app.use(cors());
+app.use("/api", authRoutes);
+app.use("/api/hostels", hostelRouter);
+app.use("/api/rooms", roomRouter);
+
+
+
 app.use(express.json());
 app.use(cors());
 
@@ -24,3 +33,5 @@ mongoose
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
   .catch((err) => console.error(err));
+
+

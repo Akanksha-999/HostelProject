@@ -1,4 +1,6 @@
 const { MongoClient } = require('mongodb');
+const express =require("express");
+const app=express();
 
 const uri = "mongodb://localhost:27017"; // Use Atlas URL if needed
 const client = new MongoClient(uri);
