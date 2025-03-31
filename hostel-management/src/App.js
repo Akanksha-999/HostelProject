@@ -5,6 +5,7 @@ import { FaUserGraduate, FaUserTie, FaBuilding, FaClipboardList, FaBed, FaEnvelo
 import axios from "axios";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Information from "./Information";
+import AvailableRooms from "./AvailableRooms";
 import './App.css';
 
 const AnimatedText = ({ text }) => {
@@ -36,6 +37,14 @@ function App() {
       document.getElementById("dashboard").scrollIntoView({ behavior: "smooth" });
     }
   }, [userType]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true); // ✅ Keep user logged in across tabs
+    }
+  }, []);
 
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
@@ -45,11 +54,9 @@ const [address, setAddress] = useState("");
 const [country, setCountry] = useState("");
 const [state, setState] = useState("");
 const [error, setError] = useState("");
-// const [isLogin, setIsLogin] = useState(true);
-// const [userType, setUserType] = useState(null);
 const [isAuthenticated, setIsAuthenticated] = useState(false);
 const [showInfo, setShowInfo] = useState(false); // State to track visibility
-
+const [showRooms, setShowRooms] = useState(false);
 const handleAuth = async (e) => {
   e.preventDefault();
   try {
@@ -63,16 +70,8 @@ const handleAuth = async (e) => {
     if (response.status === 200) {
       alert("Login Successful ! 😊");
 
-      // if (isLogin) {
-      //   localStorage.setItem("token", response.data.token); // Store token
-      //   window.location.href = "/dashboard"; // Redirect to dashboard
-      // }
-      
-      // setUserType(null); // Close the login/register form
-
       // Store token (optional)
       localStorage.setItem("token", response.data.token);
-
       // Update state to show dashboard
       setIsAuthenticated(true);
     }
@@ -115,47 +114,6 @@ const handleAuth = async (e) => {
       </div>
 
     </div>
-    
-    {/*{userType && (
-      <motion.div id="dashboard" className="mt-8 p-6 bg-white rounded-lg shadow-lg h-auto" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        {/* <h3 className="text-2xl font-bold mb-4 text-gray-800">{userType} Dashboard</h3> 
-        <div className="flex flex-col space-y-6"> 
-          {(userType === "student" || userType === "employee") && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-              <div className="bg-gray-800 p-6 rounded-xl shadow-xl w-96">
-                <h2 className="text-2xl font-semibold text-blue-400">
-                  {isLogin ? "Login" : "Register"}
-                </h2>
-                <form className="mt-4">
-                  {!isLogin && (
-                    <>
-                      <input type="text" placeholder="Name" className="w-full p-2 mb-2 rounded bg-gray-700" />
-                      <input type="text" placeholder="Mobile No." className="w-full p-2 mb-2 rounded bg-gray-700" />
-                      <input type="text" placeholder="Address" className="w-full p-2 mb-2 rounded bg-gray-700" />
-                      <input type="text" placeholder="Country" className="w-full p-2 mb-2 rounded bg-gray-700" />
-                      <input type="text" placeholder="State" className="w-full p-2 mb-2 rounded bg-gray-700" />
-                    </>
-                  )}
-                  <input type="email" placeholder="Email" className="w-full p-2 mb-2 rounded bg-gray-700" />
-                  <input type="password" placeholder="Password" className="w-full p-2 mb-2 rounded bg-gray-700" />
-                  <button className="w-full bg-blue-500 hover:bg-blue-600 py-2 mt-4">
-                    {isLogin ? "Proceed to Dashboard" : "Register"}
-                  </button>
-                </form>
-                <p className="mt-4 text-gray-300 text-center cursor-pointer" onClick={() => setIsLogin(!isLogin)}>
-                  {isLogin ? "Don't have an account? Register" : "Already have an account? Login"}
-                </p>
-                <button className="mt-4 w-full bg-red-500 hover:bg-red-600 py-2" onClick={() => setUserType(null)}>
-                  Close
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </motion.div>
-    )
-  } 
-  */}
 
 <div className="App">
       {/* Show Dashboard if authenticated */}
@@ -285,22 +243,20 @@ const handleAuth = async (e) => {
     
 {userType === "hostel" && (
             <>
-              <div className="bg-blue-100 hover:shadow-lg p-6 flex flex-col items-center space-y-4">
-                <span className="text-lg font-semibold">Available Rooms</span>
+              <div className="bg-blue-100 hover:shadow-lg p-6 flex flex-col items-center space-y-4 cursor pointer"
+              onClick={() => setShowRooms(!showRooms)}
+              >
+              <span className="text-lg font-semibold">Available Rooms</span>
               </div>
-              <Router>
-      <div className="p-6">
-        <div className="bg-yellow-100 hover:shadow-lg p-6 flex flex-col items-center space-y-4">
-          <a href="/information" target="_blank" rel="noopener noreferrer" className="text-lg font-semibold cursor-pointer">
-            Information
-          </a>
-        </div>
+              {showRooms && <AvailableRooms />}
+              <div
+              className="bg-yellow-100 hover:shadow-lg p-6 flex flex-col items-center space-y-4 cursor-pointer"
+              onClick={() => setShowInfo(!showInfo)} // Toggle visibility
+              >
+             <span className="text-lg font-semibold">Information</span>
+            </div>
+             {showInfo && <Information />}
 
-        <Routes>
-          <Route path="/information" element={<Information />} />
-        </Routes>
-      </div>
-    </Router>
     </>
           )}     
     
