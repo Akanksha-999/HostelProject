@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaUserGraduate, FaUserTie, FaBuilding, FaClipboardList, FaBed, FaEnvelopeOpenText, FaExclamationTriangle, FaUtensils, FaMapMarkerAlt, FaCamera } from "react-icons/fa";
 import axios from "axios";
-
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Information from "./Information";
 import './App.css';
 
 const AnimatedText = ({ text }) => {
@@ -47,6 +48,8 @@ const [error, setError] = useState("");
 // const [isLogin, setIsLogin] = useState(true);
 // const [userType, setUserType] = useState(null);
 const [isAuthenticated, setIsAuthenticated] = useState(false);
+const [showInfo, setShowInfo] = useState(false); // State to track visibility
+
 const handleAuth = async (e) => {
   e.preventDefault();
   try {
@@ -153,8 +156,7 @@ const handleAuth = async (e) => {
     )
   } 
   */}
-{/* import { useState } from "react";
-import axios from "axios"; // Import Axios */}
+
 <div className="App">
       {/* Show Dashboard if authenticated */}
       {isAuthenticated ? (
@@ -286,10 +288,20 @@ import axios from "axios"; // Import Axios */}
               <div className="bg-blue-100 hover:shadow-lg p-6 flex flex-col items-center space-y-4">
                 <span className="text-lg font-semibold">Available Rooms</span>
               </div>
-              <div className="bg-yellow-100 hover:shadow-lg p-6 flex flex-col items-center space-y-4">
-                <span className="text-lg font-semibold">Information</span>
-              </div>
-            </>
+              <Router>
+      <div className="p-6">
+        <div className="bg-yellow-100 hover:shadow-lg p-6 flex flex-col items-center space-y-4">
+          <a href="/information" target="_blank" rel="noopener noreferrer" className="text-lg font-semibold cursor-pointer">
+            Information
+          </a>
+        </div>
+
+        <Routes>
+          <Route path="/information" element={<Information />} />
+        </Routes>
+      </div>
+    </Router>
+    </>
           )}     
     
  </div>
