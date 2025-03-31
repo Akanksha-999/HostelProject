@@ -246,7 +246,7 @@ const handleAuth = async (e) => {
               <div className="bg-blue-100 hover:shadow-lg p-6 flex flex-col items-center space-y-4 cursor pointer"
               onClick={() => setShowRooms(!showRooms)}
               >
-              <span className="text-lg font-semibold">Available Rooms</span>
+              <span className="text-lg font-semibold"> Rooms</span>
               </div>
               {showRooms && <AvailableRooms />}
               <div
